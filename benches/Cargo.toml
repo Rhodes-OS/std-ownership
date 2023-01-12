@@ -1,0 +1,13 @@
+[package]
+name = "benches"
+version = "0.1.0"
+edition = "2021"
+
+[[bench]]
+name = "benchmarks"
+path = "src/lib.rs"
+harness = false
+
+[dependencies]
+std_ownership = { path = "../core/" }
+criterion = "0.4"
