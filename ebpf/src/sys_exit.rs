@@ -1,7 +1,7 @@
 use redbpf::load::Loader;
 use probes::ownership::BorrowResult;
 use futures::stream::StreamExt;
-use std::{ffi::CStr, ptr};
+use std::ptr;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
