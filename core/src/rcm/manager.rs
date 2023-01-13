@@ -23,6 +23,11 @@ where
     }
 
     #[inline]
+    pub fn borrow(&mut self, applier: Owner, certificate_id: u8) -> bool {
+        self.borrow(applier, certificate_id, Role::WRITE)
+    }
+
+    #[inline]
     pub fn borrow(&mut self, applier: Owner, certificate_id: u8, role: Role) -> bool {
         if applier.role() == Role::SYS {
             return true;

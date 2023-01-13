@@ -1,6 +1,13 @@
-[workspace]
-members = ["probes"]
+[package]
+name = "filebpf"
+version = "0.1.0"
+edition = "2021"
 
+[[bin]]
+name = "writefile"
+path = "src/write_file.rs"
+
+[dependencies]
 redbpf = { version = "2.3.0", features = ["load"] }
 tokio = { version = "1.0", features = ["rt", "signal", "time", "io-util", "net", "sync"] }
 tracing-subscriber = "0.2"
