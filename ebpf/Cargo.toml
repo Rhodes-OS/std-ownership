@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [[bin]]
-name = "writefile"
-path = "src/write_file.rs"
+name = "ownership-demo"
+path = "src/owership.rs"
 
 [dependencies]
 redbpf = { version = "2.3.0", features = ["load"] }
