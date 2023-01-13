@@ -1,8 +1,8 @@
 #![deny(unsafe_op_in_unsafe_fn)]
 
-use crate::api::ResourceChecker;
+use std_ownership_api::resource::Resource;
+use std_ownership_api::checker::ResourceChecker;
 use crate::resource::buffer::Buffer;
-use crate::api::Resource;
 
 pub struct BufferChecker {
     buffer: Buffer,

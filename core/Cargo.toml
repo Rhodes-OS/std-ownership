@@ -5,3 +5,6 @@ edition = "2021"
 
 [lib]
 doctest = false
+
+[dependencies]
+std_ownership_api = { path = "../api/" }

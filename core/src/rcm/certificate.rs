@@ -1,5 +1,6 @@
 use crate::privilege::role::Role;
-use crate::api::{Resource, ResourceChecker, OwnerChecker};
+use std_ownership_api::resource::Resource;
+use std_ownership_api::checker::{ResourceChecker, OwnerChecker};
 use crate::util::collection;
 use std::vec::Vec;
 

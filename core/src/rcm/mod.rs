@@ -2,4 +2,4 @@
 
 pub mod checker;
 pub mod certificate;
-pub mod rcm;
+pub mod manager;

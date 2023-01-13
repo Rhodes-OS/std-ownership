@@ -5,7 +5,3 @@ pub trait ResourceChecker {
 pub trait OwnerChecker {
     fn check(&self) -> bool;
 }
-
-pub trait Resource {
-    fn size(&self) -> u8;
-}

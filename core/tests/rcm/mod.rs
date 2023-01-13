@@ -1,1 +1,2 @@
 mod checker;
+mod manager;

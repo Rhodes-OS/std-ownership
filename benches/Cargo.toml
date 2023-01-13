@@ -5,9 +5,10 @@ edition = "2021"
 
 [[bench]]
 name = "benchmarks"
-path = "src/lib.rs"
+path = "lib.rs"
 harness = false
 
 [dependencies]
 std_ownership = { path = "../core/" }
+std_ownership_api = { path = "../api/"}
 criterion = "0.4"

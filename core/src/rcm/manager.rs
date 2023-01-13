@@ -1,22 +1,23 @@
 use crate::privilege::owner::Owner;
 use crate::privilege::role::Role;
 use crate::rcm::certificate::Certificate;
-use crate::api::{Resource, ResourceChecker, OwnerChecker};
+use std_ownership_api::checker::{ResourceChecker, OwnerChecker};
+use std_ownership_api::resource::Resource;
 use std::collections::HashMap;
 
-pub struct RCM<R, RC, OC> {
+pub struct Manager<R, RC, OC> {
     certificates: HashMap<u8, Certificate<R, RC, OC>>
 }
 
-impl<R, RC, OC> RCM<R, RC, OC> 
+impl<R, RC, OC> Manager<R, RC, OC> 
 where
     R: Resource,
     RC: ResourceChecker,
     OC: OwnerChecker,
 {
     #[must_use]
-    pub fn new() -> RCM<R, RC, OC> {
-        RCM { 
+    pub fn new() -> Manager<R, RC, OC> {
+        Manager { 
             certificates: HashMap::new(),
         }
     }

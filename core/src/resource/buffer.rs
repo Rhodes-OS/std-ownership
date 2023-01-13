@@ -1,6 +1,6 @@
 #![deny(unsafe_op_in_unsafe_fn)]
 
-use crate::api::Resource;
+use std_ownership_api::resource::Resource;
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct Buffer {
