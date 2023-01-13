@@ -1,0 +1,7 @@
+[[bin]]
+name = "ownership"
+path = "src/ownership/main.rs"
+required-features = ["probes"]
+
+[dependencies]
+std_ownership = { path = "../../core/" }
