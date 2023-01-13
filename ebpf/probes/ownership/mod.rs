@@ -2,7 +2,7 @@
 #[derive(Debug, Clone)]
 pub struct BorrowResult {
     applier: str,
-    state: bool
+    state: bool,
 }
 
 impl BorrowResult {

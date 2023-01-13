@@ -12,7 +12,8 @@ async fn main() {
         .expect("error on Loaded::kprobe_mut");
 
     probe
-        .attach_kprobe("do_write", 0)
+        .attach_kprobe("sys_exit", 0)
+        .attach_kprobe("__x64_sys_exit", 0)
         .expect("error on KProbe::attach_kprobe");
 
     while let Some((map_name, events)) = loaded.events.next().await {
@@ -20,8 +21,7 @@ async fn main() {
             for event in events {
                 unsafe {
                     let borrow_result = ptr::read(event.as_ptr() as *const BorrowResult);
-                    let applier = CStr::from_ptr(borrow_result.applier.as_ptr() as *const _);
-                    println!("Borrow result: {}, {}", applier.to_string_lossy());
+                    println!("Borrow result: {}, {}", borroww_result.applier, borrow_result.state);
                 };
             }
         }
