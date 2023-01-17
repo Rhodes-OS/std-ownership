@@ -1,30 +1,47 @@
 use std_ownership::rcm::manager::Manager;
 use std_ownership::rcm::checker::buffer_checker::BufferChecker;
-use std_ownership::resource::buffer::Buffer;
-use std_ownership::privilege::owner::Owner;
-use std_ownership::privilege::role::Role;
-use std_ownership::rcm::certificate::Certificate;
+use std_ownership::model::resource::buffer::Buffer;
+use std_ownership_api::model::Owner;
+use std_ownership_api::model::Role;
 use std_ownership_api::checker::OwnerChecker;
 use criterion::Bencher;
 
 pub fn bench_borrow(b: &mut Bencher) {
     b.iter(|| {
         let buffer = Buffer::new(8);
-        let mut certificate: Certificate<Buffer, BufferChecker, MySQLChecker> = Certificate::new(1, Buffer::new(8));
-        let cid = certificate.id();
-        certificate.register_resource_checker(BufferChecker::new(buffer));
-        certificate.register_owner_checker(MySQLChecker{});
-        let applier = Owner::new(1, Role::WRITE);
-        let mut rcm = Manager::new();
-        rcm.push_certificate(certificate);
-        rcm.borrow(applier, cid, Role::SYS);
+
+        let mut resource_checkers = vec![];
+        resource_checkers.push(BufferChecker::new(buffer));
+        
+        let mut rcm = Manager::init_resource_checkers(buffer, resource_checkers);
+
+        let mut owner_checkers = vec![];
+        let applier = MySQL{};
+        owner_checkers.push(MySQL{});
+        rcm.init_owner_checkers(applier.id(), buffer, owner_checkers);
+        
+        rcm.borrow(applier, buffer, "MySQL".as_bytes());
     });
 }
 
-struct MySQLChecker;
-impl OwnerChecker for MySQLChecker {
-    #[inline]
-    fn check(&self) -> bool {
-        true
+struct MySQL;
+
+impl Owner for MySQL {
+
+    fn id(&self) -> u8 {
+        1
     }
-}  
+
+    fn role(&self) -> Role {
+        panic!()
+    }
+}
+
+use std::str;
+
+impl OwnerChecker for MySQL {
+    #[inline]
+    fn check(&self, table_name: &[u8]) -> bool {
+        "MySQL" == str::from_utf8(table_name).unwrap()
+    }
+}

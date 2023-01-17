@@ -1,6 +1,6 @@
 use std_ownership::rcm::checker::buffer_checker::BufferChecker;
-use std_ownership::resource::buffer::Buffer;
-use std_ownership_api::resource::Resource;
+use std_ownership::model::resource::buffer::Buffer;
+use std_ownership_api::model::Resource;
 
 #[test]
 fn init_buffer_checker() {

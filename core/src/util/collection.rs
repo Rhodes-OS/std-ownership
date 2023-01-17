@@ -1,5 +1,5 @@
 #[inline]
-pub fn remove_element_in_vec<P: PartialEq>(mut vec: Vec<P>, element: P) -> P {
+pub fn remove_element_in_vec<E: PartialEq>(mut vec: Vec<E>, element: E) -> E {
     match vec.iter().position(|e| *e == element).unwrap() {
         pos => vec.remove(pos)
     }

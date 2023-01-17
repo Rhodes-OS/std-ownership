@@ -1,2 +1,2 @@
 pub mod checker;
-pub mod resource;
+pub mod model;

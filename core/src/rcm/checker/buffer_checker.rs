@@ -1,8 +1,8 @@
 #![deny(unsafe_op_in_unsafe_fn)]
 
-use std_ownership_api::resource::Resource;
+use std_ownership_api::model::Resource;
 use std_ownership_api::checker::ResourceChecker;
-use crate::resource::buffer::Buffer;
+use crate::model::resource::buffer::Buffer;
 
 pub struct BufferChecker {
     buffer: Buffer,
@@ -22,8 +22,8 @@ impl BufferChecker {
 
 impl ResourceChecker for BufferChecker {
     #[inline]
-    fn check(&self, used_buffer_size: u8) -> bool {
-        if self.buffer.size() >= used_buffer_size {
+    fn check(&self) -> bool {
+        if self.buffer.size() >= self.buffer.used_size() {
             return false;
         }
         true
