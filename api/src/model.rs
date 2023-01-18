@@ -7,15 +7,10 @@ pub trait Owner {
     fn role(&self) -> Role;
 }
 
-#[derive(Clone, Copy, Eq, PartialEq, Hash)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq, Hash)]
 pub enum Role {
     SYS,
     OWNER,
     ACCESS,
-}
-
-impl Default for Role {
-    fn default() -> Self {
-        Role::OWNER
-    }
+    UNASSIGNED
 }

@@ -3,5 +3,6 @@ members = [
     "api",
     "core",
     "benches",
-    "ebpf"
+    "ebpf",
+    "examples"
 ]

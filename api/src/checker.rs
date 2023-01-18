@@ -1,7 +1,3 @@
-pub trait ResourceChecker {
-    fn check(&self) -> bool;
-}
-
-pub trait OwnerChecker {
+pub trait Checker {
     fn check(&self, buf: &[u8]) -> bool;
 }

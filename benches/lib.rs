@@ -2,8 +2,9 @@ use criterion::Criterion;
 
 fn bench_rcm(c: &mut Criterion) {
     let mut group = c.benchmark_group("rcm_bench");
+    
     group.bench_function("rcm_bench_check", |b| {
-        crate::rcm::manager::bench_borrow(b);
+        crate::rcm::center::bench_borrow(b);
     });
     group.finish();
 }

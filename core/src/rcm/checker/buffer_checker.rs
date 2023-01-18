@@ -1,29 +1,29 @@
 #![deny(unsafe_op_in_unsafe_fn)]
 
 use std_ownership_api::model::Resource;
-use std_ownership_api::checker::ResourceChecker;
+use std_ownership_api::checker::Checker;
 use crate::model::resource::buffer::Buffer;
 
-pub struct BufferChecker {
-    buffer: Buffer,
+pub struct BufferChecker<'a> {
+    buffer: Buffer<'a>,
 }
 
-impl BufferChecker {
+impl<'a> BufferChecker<'a> {
     #[must_use]
     pub fn new(buffer: Buffer) -> BufferChecker {
         BufferChecker { buffer }
     }
 
     #[must_use]
-    pub fn buffer(&self) -> Buffer {
-        self.buffer
+    pub fn buffer(&self) -> &Buffer<'a> {
+        &self.buffer
     }
 }
 
-impl ResourceChecker for BufferChecker {
+impl<'a> Checker for BufferChecker<'a> {
     #[inline]
-    fn check(&self) -> bool {
-        if self.buffer.size() >= self.buffer.used_size() {
+    fn check(&self, buf: &[u8]) -> bool {
+        if self.buffer.size() >= self.buffer.used_size() + buf.len() as u64 {
             return false;
         }
         true

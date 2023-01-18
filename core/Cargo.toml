@@ -7,4 +7,6 @@ edition = "2021"
 doctest = false
 
 [dependencies]
+libc = "0.2"
+memmap2 = "0.5.8"
 std_ownership_api = { path = "../api/" }
