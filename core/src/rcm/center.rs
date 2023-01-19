@@ -5,6 +5,7 @@ use std_ownership_api::checker::Checker;
 use std_ownership_api::model::Resource;
 use std::collections::HashMap;
 use std::hash::Hash;
+use std::io;
 
 #[derive(Debug)]
 pub struct ResourceCenter<R, C> {
@@ -40,7 +41,7 @@ where
             return true;
         }
 
-        let contract = self.get_resource_contract(resource);
+        let contract = self.get_resource_contract(resource).unwrap();
         if contract.contain_owner(applier.id(), role) {
             return true;
         }
@@ -53,8 +54,7 @@ where
             }
         }
 
-        contract.borrow(applier.id(), role);
-        true
+        contract.borrow(applier.id(), role).unwrap()
     }
 
     #[must_use]
@@ -69,16 +69,18 @@ where
         contract.add_role_entry(Role::OWNER, owner_checkers);
         //init role lifecycle
         contract.add_lifecycle(Role::OWNER);
-        contract.borrow(applier_id, Role::OWNER);
+        let borrow_state = contract.borrow(applier_id, Role::OWNER).unwrap();
 
-        self.resource_contracts.insert(resource, contract);
+        if borrow_state {
+            self.resource_contracts.insert(resource, contract);
+        }
     }
 
     #[inline]
-    pub fn get_resource_contract(&mut self, resource: R) -> &mut ResourceContract<R, C> {
+    pub fn get_resource_contract(&mut self, resource: R) -> io::Result<&mut ResourceContract<R, C>> {
         match self.resource_contracts.get_mut(&resource) {
-            Some(resource_contract) => resource_contract,
-            _ => panic!("Not exist resource contract in rcm")
+            Some(resource_contract) => Ok(resource_contract),
+            _ => Err(io::Error::new(io::ErrorKind::NotFound, "Not exist resource contract in rcm"))
         }
     }
 

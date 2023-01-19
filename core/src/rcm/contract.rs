@@ -5,6 +5,7 @@ use crate::util::collection;
 use std::vec::Vec;
 use std::collections::HashMap;
 use std::sync::Mutex;
+use std::io;
 
 #[derive(Debug)]
 pub struct ResourceContract<R, C> {
@@ -27,10 +28,10 @@ where
     }
 
     #[inline]
-    pub fn borrow(&mut self, owner_id: u8, role: Role) {
+    pub fn borrow(&mut self, owner_id: u8, role: Role) -> io::Result<bool> {
         match self.role_entry_owners(role) {
-            Some(mutex_owners) => mutex_owners.lock().unwrap().push(owner_id),
-            None => panic!("Borrow error")
+            Some(mutex_owners) => { mutex_owners.lock().unwrap().push(owner_id); Ok(true) },
+            None => Err(io::Error::new(io::ErrorKind::WouldBlock, "Borrow error"))
         }
         
     }
@@ -69,10 +70,10 @@ where
     }
 
     #[inline]
-    pub fn role_entry(&mut self, role: Role) -> &mut RoleEntry<C> {
+    pub fn role_entry(&mut self, role: Role) -> io::Result<&mut RoleEntry<C>> {
         match self.role_entries.get_mut(&role) {
-            Some(role_entry) => role_entry,
-            _ => panic!("Not exist role entry")
+            Some(role_entry) => Ok(role_entry),
+            _ => Err(io::Error::new(io::ErrorKind::NotFound, "Not exist role entry"))
         }
     }
 
