@@ -9,10 +9,10 @@ use criterion::Bencher;
 pub fn bench_borrow(b: &mut Bencher) {
     b.iter(|| {
         let buffer = Buffer::new(1024);
-        let mut rc = ResourceCenter::build(buffer);
-
+        
         let owner_checkers = vec![BufferChecker::new(buffer)];
-        rc.init_owner_checkers(0, buffer, owner_checkers);
+        let mut rc = ResourceCenter::builder();
+        rc.build_owner_checkers(0, buffer, owner_checkers);
 
         let applier = MySQL{};
         rc.borrow(applier, buffer, "MySQL".as_bytes());

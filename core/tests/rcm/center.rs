@@ -8,10 +8,10 @@ use std_ownership_api::checker::Checker;
 #[test]
 fn test_borrow() {
     let buffer = Buffer::new(1024);
-    let mut rc = ResourceCenter::build(buffer);
 
     let owner_checkers = vec![BufferChecker::new(Buffer::new(1024))];
-    rc.init_owner_checkers(0, buffer, owner_checkers);
+    let mut rc = ResourceCenter::builder();
+    rc.build_owner_checkers(0, buffer, owner_checkers);
 
     let applier = MySQL{};
     assert_eq!(rc.borrow(applier, buffer, "MySQL".as_bytes()), false);

@@ -58,19 +58,20 @@ where
     }
 
     #[must_use]
-    pub fn build(resource: R) -> ResourceCenter<R, C> {
-        let mut rc = ResourceCenter::new();
-        rc.resource_contracts.insert(resource, ResourceContract::new(resource));
-        rc
+    pub fn builder() -> ResourceCenter<R, C> {
+        ResourceCenter::new()
     }
 
-    pub fn init_owner_checkers(&mut self, applier_id: u8, resource: R, owner_checkers: Vec<C>) {
-        let contract = self.get_resource_contract(resource);
+    pub fn build_owner_checkers(&mut self, applier_id: u8, resource: R, owner_checkers: Vec<C>) {
+        let mut contract = ResourceContract::new(resource);
+
         //init role checkers
         contract.add_role_entry(Role::OWNER, owner_checkers);
         //init role lifecycle
         contract.add_lifecycle(Role::OWNER);
         contract.borrow(applier_id, Role::OWNER);
+
+        self.resource_contracts.insert(resource, contract);
     }
 
     #[inline]
