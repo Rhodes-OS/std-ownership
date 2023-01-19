@@ -5,7 +5,6 @@ use crate::unix::Unix;
 use std_ownership::rcm::center::ResourceCenter;
 use std_ownership_api::model::Owner;
 
-
 pub fn main() {
     let file = File::new(1024);
 

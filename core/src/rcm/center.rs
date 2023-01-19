@@ -42,7 +42,7 @@ where
         }
 
         let contract = self.get_resource_contract(resource).unwrap();
-        if contract.contain_owner(applier.id(), role) {
+        if contract.contain_lifecycle_owner(applier.id(), role) {
             return true;
         }
 

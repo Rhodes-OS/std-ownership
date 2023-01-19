@@ -29,11 +29,33 @@ where
 
     #[inline]
     pub fn borrow(&mut self, owner_id: u8, role: Role) -> io::Result<bool> {
-        match self.role_entry_owners(role) {
-            Some(mutex_owners) => { mutex_owners.lock().unwrap().push(owner_id); Ok(true) },
-            None => Err(io::Error::new(io::ErrorKind::WouldBlock, "Borrow error"))
+        self.add_lifecycle_owner(role, owner_id);
+        Ok(true)
+    }
+
+    pub fn add_lifecycle_owner(&mut self, role: Role, owner_id: u8) {
+        match self.lifecycle_owners(role) {
+            Some(mutex_owners) => mutex_owners.lock().unwrap().push(owner_id),
+            None => {
+                self.lifecycle.insert(role, Mutex::new(vec![owner_id]));
+            }
         }
-        
+    }
+
+    #[inline]
+    pub fn contain_lifecycle_owner(&mut self, owner_id: u8, role: Role) -> bool {
+        match self.lifecycle_owners(role) {
+            Some(mutex_owners) => mutex_owners.get_mut().unwrap().contains(&owner_id),
+            None => false
+        }
+    }
+
+    #[inline]
+    pub fn remove_lifecycle_owner(&mut self, owner_id: u8, role: Role) -> u8 {
+        match self.lifecycle_owners(role) {
+            Some(mutex_owners) => collection::remove_element_in_vec(mutex_owners.lock().unwrap().to_vec(), owner_id),
+            None => 0
+        }
     }
 
     pub fn add_role_entry(&mut self, role: Role, checkers: Vec<C>) {
@@ -45,24 +67,7 @@ where
     }
 
     #[inline]
-    pub fn contain_owner(&mut self, owner_id: u8, role: Role) -> bool {
-        match self.role_entry_owners(role) {
-            Some(mutex_owners) => mutex_owners.get_mut().unwrap().contains(&owner_id),
-            None => false
-        }
-    }
-
-    #[inline]
-    pub fn remove_owner(&mut self, owner_id: u8, role: Role) -> u8 {
-        match self.role_entry_owners(role) {
-            Some(mutex_owners) => collection::remove_element_in_vec(mutex_owners.lock().unwrap().to_vec(), owner_id),
-            None => 0
-        }
-        
-    }
-
-    #[inline]
-    pub fn role_entry_owners(&mut self, role: Role) -> Option<&mut Mutex<Vec<u8>>> {
+    pub fn lifecycle_owners(&mut self, role: Role) -> Option<&mut Mutex<Vec<u8>>> {
         match self.lifecycle.get_mut(&role) {
             Some(role_entry_owners) => Some(role_entry_owners),
             _ => None

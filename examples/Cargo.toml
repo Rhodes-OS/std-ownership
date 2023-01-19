@@ -6,3 +6,7 @@ edition = "2021"
 [dependencies]
 std_ownership_api = { path = "../api/" }
 std_ownership ={ path = "../core/"}
+
+[[example]]
+name = "ownership"
+path = "main.rs"
