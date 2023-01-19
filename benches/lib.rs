@@ -2,7 +2,7 @@ use criterion::Criterion;
 
 fn bench_rcm(c: &mut Criterion) {
     let mut group = c.benchmark_group("rcm_bench");
-    
+    group.sample_size(10000);
     group.bench_function("rcm_bench_check", |b| {
         crate::rcm::center::bench_borrow(b);
     });

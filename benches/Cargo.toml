@@ -6,6 +6,7 @@ edition = "2021"
 [[bench]]
 name = "benchmarks"
 path = "lib.rs"
+bench = true
 harness = false
 
 [dependencies]
