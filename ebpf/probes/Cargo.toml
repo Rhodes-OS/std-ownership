@@ -3,6 +3,9 @@ name = "probes"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+path = "src/lib.rs"
+
 [[bin]]
 name = "ownership"
 path = "src/ownership/main.rs"
@@ -10,3 +13,9 @@ required-features = ["probes"]
 
 [dependencies]
 std_ownership = { path = "../../core/" }
+std_ownership_api = { path = "../../api/" }
+
+[features]
+default = []
+probes = []
+kernel5_8 = []

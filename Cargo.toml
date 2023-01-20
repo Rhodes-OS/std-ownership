@@ -4,5 +4,6 @@ members = [
     "core",
     "benches",
     "ebpf",
+    "ebpf/probes",
     "examples"
 ]

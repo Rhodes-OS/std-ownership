@@ -11,5 +11,8 @@ std_ownership ={ path = "../core/"}
 name = "ownership"
 path = "main.rs"
 
-[profile.release]
-debug = true
+# [profile.release]
+# debug = true
+# opt-level = 3
+# panic = "abort"
+# overflow-checks = false
