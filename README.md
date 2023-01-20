@@ -1,5 +1,5 @@
 # std-ownership
-An ownership model that is used to replace the system call!
+An ownership model that is used to replace the system call in Linux.
 ## Benchmark
 
 ### 1w Concurrency
