@@ -1,9 +1,8 @@
 # std-ownership
 An ownership model that is used to replace the system call!
-##
-Benchmark
+## Benchmark
 
-1w Concurrency
+### 1w Concurrency
 
 Ownership Borrow:
 [![ownership](benches/typical_ownership.svg)](benches/typical_ownership.svg)
