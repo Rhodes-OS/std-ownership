@@ -10,3 +10,6 @@ std_ownership ={ path = "../core/"}
 [[example]]
 name = "ownership"
 path = "main.rs"
+
+[profile.release]
+debug = true

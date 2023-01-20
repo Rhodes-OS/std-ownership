@@ -26,6 +26,11 @@ impl<'a> Buffer<'a> {
 
 impl<'a> Resource for Buffer<'a> {
     #[inline]
+    fn id(&self) -> u8 {
+        1
+    }
+
+    #[inline]
     fn used_size(&self) -> u64 {
         self.used_size
     }

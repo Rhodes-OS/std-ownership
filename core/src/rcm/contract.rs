@@ -2,7 +2,7 @@ use std_ownership_api::model::Role;
 use std_ownership_api::model::Resource;
 use crate::model::role::RoleEntry;
 use crate::util::collection;
-use std::vec::Vec;
+use smallvec::{SmallVec, smallvec};
 use std::collections::HashMap;
 use std::sync::Mutex;
 use std::io;
@@ -11,7 +11,7 @@ use std::io;
 pub struct ResourceContract<R, C> {
     resource: R,
     role_entries: HashMap<Role, RoleEntry<C>>, 
-    lifecycle: HashMap<Role, Mutex<Vec<u8>>>
+    lifecycle: HashMap<Role, Mutex<SmallVec<[u8; 16384]>>>
 }
 
 impl<R, C> ResourceContract<R, C>
@@ -37,7 +37,7 @@ where
         match self.lifecycle_owners(role) {
             Some(mutex_owners) => mutex_owners.lock().unwrap().push(owner_id),
             None => {
-                self.lifecycle.insert(role, Mutex::new(vec![owner_id]));
+                self.lifecycle.insert(role, Mutex::new(smallvec![owner_id]));
             }
         }
     }
@@ -63,11 +63,11 @@ where
     }
 
     pub fn add_lifecycle(&mut self, role: Role) {
-        self.lifecycle.insert(role, Mutex::new(Vec::new()));
+        self.lifecycle.insert(role, Mutex::new(smallvec![]));
     }
 
     #[inline]
-    pub fn lifecycle_owners(&mut self, role: Role) -> Option<&mut Mutex<Vec<u8>>> {
+    pub fn lifecycle_owners(&mut self, role: Role) -> Option<&mut Mutex<SmallVec<[u8; 16384]>>> {
         match self.lifecycle.get_mut(&role) {
             Some(role_entry_owners) => Some(role_entry_owners),
             _ => None

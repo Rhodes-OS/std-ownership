@@ -14,7 +14,7 @@ fn test_borrow() {
     rc.build_owner_checkers(0, buffer, owner_checkers);
 
     let applier = MySQL{};
-    assert_eq!(rc.borrow(applier, buffer, "MySQL".as_bytes()), false);
+    assert_eq!(rc.borrow(applier, 1, "MySQL".as_bytes()), false);
 }
 
 struct MySQL;

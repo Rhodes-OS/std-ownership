@@ -4,7 +4,7 @@ use std_ownership_api::model::Resource;
 use std_ownership_api::checker::Checker;
 use crate::model::resource::buffer::Buffer;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct BufferChecker<'a> {
     buffer: Buffer<'a>,
 }

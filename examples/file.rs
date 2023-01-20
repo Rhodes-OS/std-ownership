@@ -26,6 +26,10 @@ impl<'a> File<'a> {
 }
 
 impl<'a> Resource for File<'a> {
+    fn id(&self) -> u8 {
+        2
+    }
+    
     fn used_size(&self) -> u64 {
         self.used_size
     }

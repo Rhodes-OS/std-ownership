@@ -13,3 +13,8 @@ harness = false
 std_ownership = { path = "../core/" }
 std_ownership_api = { path = "../api/"}
 criterion = "0.4"
+plotters = "0.3.3"
+libc = "0.2"
+
+[profile.bench]
+debug = true

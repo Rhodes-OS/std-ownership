@@ -8,5 +8,5 @@ doctest = false
 
 [dependencies]
 libc = "0.2"
-memmap2 = "0.5.8"
+smallvec = "1.10.0"
 std_ownership_api = { path = "../api/" }

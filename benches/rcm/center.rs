@@ -1,21 +1,18 @@
 use std_ownership_api::model::Owner;
+use std_ownership_api::model::Resource;
 use std_ownership_api::model::Role;
 use std_ownership_api::checker::Checker;
-use std_ownership::model::resource::buffer::Buffer;
-use std_ownership::rcm::checker::buffer_checker::BufferChecker;
 use std_ownership::rcm::center::ResourceCenter;
 use criterion::Bencher;
 
-pub fn bench_borrow(b: &mut Bencher) {
+pub fn bench_borrow<R, C>(b: &mut Bencher, rc: &mut ResourceCenter<R, C>) 
+where
+    R: Resource + Eq + Hash + Copy,
+    C: Checker
+{
     b.iter(|| {
-        let buffer = Buffer::new(1024);
-        
-        let owner_checkers = vec![BufferChecker::new(buffer)];
-        let mut rc = ResourceCenter::builder();
-        rc.build_owner_checkers(0, buffer, owner_checkers);
-
-        let applier = MySQL{};
-        rc.borrow(applier, buffer, "MySQL".as_bytes());
+        rc.borrow(MySQL{}, 1, "MySQL".as_bytes());
+        rc.cancel_borrow(MySQL{}, 1);
     });
 }
 
@@ -31,6 +28,7 @@ impl Owner for MySQL {
     }
 }
 
+use std::hash::Hash;
 use std::str;
 
 impl Checker for MySQL {
