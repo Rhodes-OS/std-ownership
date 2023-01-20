@@ -8,7 +8,7 @@ pub struct BorrowResult {
 }
 
 impl BorrowResult {
-    pub fn new(applier: u, state: bool) -> BorrowResult {
+    pub fn new(applier: u8, state: bool) -> BorrowResult {
         BorrowResult { applier, state }
     }
 }
