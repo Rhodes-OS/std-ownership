@@ -19,7 +19,7 @@ where
     #[must_use]
     pub fn new() -> Self {
         Self {
-            resource_contracts: HashMap::new()
+            resource_contracts: HashMap::with_capacity(1000)
         }
     }
 

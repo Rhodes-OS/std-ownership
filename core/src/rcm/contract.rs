@@ -1,9 +1,9 @@
 use std_ownership_api::model::Role;
 use std_ownership_api::model::Resource;
 use crate::model::role::RoleEntry;
-use crate::util::collection;
-use smallvec::{SmallVec, smallvec};
+use strum::IntoEnumIterator;
 use std::collections::HashMap;
+use std::collections::hash_set::HashSet;
 use std::sync::Mutex;
 use std::io;
 
@@ -11,7 +11,7 @@ use std::io;
 pub struct ResourceContract<R, C> {
     resource: R,
     role_entries: HashMap<Role, RoleEntry<C>>, 
-    lifecycle: HashMap<Role, Mutex<SmallVec<[u8; 16384]>>>
+    lifecycle: HashMap<Role, Mutex<HashSet<u8>>>
 }
 
 impl<R, C> ResourceContract<R, C>
@@ -22,23 +22,26 @@ where
     pub fn new(resource: R) -> ResourceContract<R, C> {
         ResourceContract { 
             resource,
-            role_entries: HashMap::new(),
-            lifecycle: HashMap::new()
+            role_entries: HashMap::with_capacity(8),
+            lifecycle: {
+                let mut lifecycle_map = HashMap::with_capacity(8);
+                for role in Role::iter() {
+                    lifecycle_map.insert(role, Mutex::new(HashSet::with_capacity(1000)));
+                }
+                lifecycle_map
+            }
         }
     }
 
     #[inline]
     pub fn borrow(&mut self, owner_id: u8, role: Role) -> io::Result<bool> {
-        self.add_lifecycle_owner(role, owner_id);
-        Ok(true)
+        Ok(self.add_lifecycle_owner(role, owner_id))
     }
 
-    pub fn add_lifecycle_owner(&mut self, role: Role, owner_id: u8) {
+    pub fn add_lifecycle_owner(&mut self, role: Role, owner_id: u8) -> bool {
         match self.lifecycle_owners(role) {
-            Some(mutex_owners) => mutex_owners.lock().unwrap().push(owner_id),
-            None => {
-                self.lifecycle.insert(role, Mutex::new(smallvec![owner_id]));
-            }
+            Some(mutex_owners) => mutex_owners.lock().unwrap().insert(owner_id),
+            None => false
         }
     }
 
@@ -51,10 +54,10 @@ where
     }
 
     #[inline]
-    pub fn remove_lifecycle_owner(&mut self, owner_id: u8, role: Role) -> u8 {
+    pub fn remove_lifecycle_owner(&mut self, owner_id: u8, role: Role) -> bool {
         match self.lifecycle_owners(role) {
-            Some(mutex_owners) => collection::remove_element_in_vec(mutex_owners.lock().unwrap().to_vec(), owner_id),
-            None => 0
+            Some(mutex_owners) => mutex_owners.lock().unwrap().remove(&owner_id),
+            None => false
         }
     }
 
@@ -63,11 +66,11 @@ where
     }
 
     pub fn add_lifecycle(&mut self, role: Role) {
-        self.lifecycle.insert(role, Mutex::new(smallvec![]));
+        self.lifecycle.insert(role, Mutex::new(HashSet::new()));
     }
 
     #[inline]
-    pub fn lifecycle_owners(&mut self, role: Role) -> Option<&mut Mutex<SmallVec<[u8; 16384]>>> {
+    pub fn lifecycle_owners(&mut self, role: Role) -> Option<&mut Mutex<HashSet<u8>>> {
         match self.lifecycle.get_mut(&role) {
             Some(role_entry_owners) => Some(role_entry_owners),
             _ => None

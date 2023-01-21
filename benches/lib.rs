@@ -6,7 +6,7 @@ use std_ownership::rcm::center::ResourceCenter;
 
 fn bench_compare(c: &mut Criterion) {
     let mut group = c.benchmark_group("bench_compare");
-    group.sample_size(10000);
+    group.sample_size(1000);
 
     group.bench_function("bench_rcm_borrow", |b| {
         let buffer = Buffer::new(1024);

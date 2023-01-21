@@ -12,7 +12,7 @@ where
 {
     b.iter(|| {
         rc.borrow(MySQL{}, 1, "MySQL".as_bytes());
-        rc.cancel_borrow(MySQL{}, 1);
+        // rc.cancel_borrow(MySQL{}, 1);
     });
 }
 
