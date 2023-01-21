@@ -57,15 +57,15 @@ where
     }
 
     #[inline]
-    pub fn cancel_borrow<O>(&mut self, applier: O, resource_id: u8) 
+    pub fn free<O>(&mut self, applier: O, resource_id: u8) 
     where
         O: Owner
     {
-        self.cancel_exact_role_borrow(applier, resource_id, Role::ACCESS)
+        self.free_exact_role(applier, resource_id, Role::ACCESS)
     }
 
     #[inline]
-    pub fn cancel_exact_role_borrow<O>(&mut self, applier: O, resource_id: u8, role: Role) 
+    pub fn free_exact_role<O>(&mut self, applier: O, resource_id: u8, role: Role) 
     where
         O: Owner
     {
