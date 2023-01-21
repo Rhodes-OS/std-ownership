@@ -34,10 +34,6 @@ where
     }
 
     #[inline]
-    pub fn borrow(&mut self, owner_id: u8, role: Role) -> io::Result<bool> {
-        Ok(self.add_lifecycle_owner(role, owner_id))
-    }
-
     pub fn add_lifecycle_owner(&mut self, role: Role, owner_id: u8) -> bool {
         match self.lifecycle_owners(role) {
             Some(mutex_owners) => mutex_owners.lock().unwrap().insert(owner_id),
@@ -61,10 +57,6 @@ where
         }
     }
 
-    pub fn add_role_entry(&mut self, role: Role, checkers: Vec<C>) {
-        self.role_entries.insert(role, RoleEntry::new(role, checkers));
-    }
-
     pub fn add_lifecycle(&mut self, role: Role) {
         self.lifecycle.insert(role, Mutex::new(HashSet::new()));
     }
@@ -75,6 +67,10 @@ where
             Some(role_entry_owners) => Some(role_entry_owners),
             _ => None
         }
+    }
+
+    pub fn add_role_entry(&mut self, role: Role, checkers: Vec<C>) {
+        self.role_entries.insert(role, RoleEntry::new(role, checkers));
     }
 
     #[inline]

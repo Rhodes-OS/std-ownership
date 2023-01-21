@@ -53,7 +53,7 @@ where
             }
         }
 
-        contract.borrow(applier.id(), role).unwrap()
+        contract.add_lifecycle_owner(role, applier.id())
     }
 
     #[inline]
@@ -85,7 +85,7 @@ where
         contract.add_role_entry(Role::OWNER, owner_checkers);
         //init role lifecycle
         contract.add_lifecycle(Role::OWNER);
-        let borrow_state = contract.borrow(applier_id, Role::OWNER).unwrap();
+        let borrow_state = contract.add_lifecycle_owner(Role::OWNER, applier_id);
 
         if borrow_state {
             self.resource_contracts.insert(resource.id(), contract);
