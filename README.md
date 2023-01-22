@@ -4,7 +4,7 @@ An ownership model that is used to replace the system call in Linux.
 
 ### 1w Concurrency
 
-It's surprising! The ownership is 10x faster than syscall.
+It's surprising! The ownership model is 10x faster than syscall.
 
 #### Ownership Borrow:
 [![ownership](benches/typical_ownership.svg)](benches/typical_ownership.svg)
