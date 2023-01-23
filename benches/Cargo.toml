@@ -6,7 +6,6 @@ edition = "2021"
 [[bench]]
 name = "benchmarks"
 path = "lib.rs"
-bench = true
 harness = false
 
 [dependencies]
@@ -15,6 +14,7 @@ std_ownership_api = { path = "../api/"}
 criterion = "0.4"
 plotters = "0.3.3"
 libc = "0.2"
+pprof = { version = "0.11", features = ["criterion", "flamegraph"] }
 
 # [profile.bench]
 # debug = true

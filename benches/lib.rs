@@ -1,4 +1,5 @@
 use criterion::Criterion;
+use pprof::criterion::{Output, PProfProfiler};
 
 use std_ownership::model::resource::buffer::Buffer;
 use std_ownership::rcm::checker::buffer_checker::BufferChecker;
@@ -6,7 +7,7 @@ use std_ownership::rcm::center::ResourceCenter;
 
 fn bench_compare(c: &mut Criterion) {
     let mut group = c.benchmark_group("bench_compare");
-    // group.sample_size(5000);
+    // group.sample_size(2000);
 
     group.bench_function("bench_rcm_borrow", |b| {
         let buffer = Buffer::new(1024);
@@ -24,7 +25,11 @@ fn bench_compare(c: &mut Criterion) {
     group.finish();
 }
 
-criterion::criterion_group!(benches, bench_compare);
+criterion::criterion_group! {
+    name = benches;
+    config = Criterion::default().with_profiler(PProfProfiler::new(100, Output::Flamegraph(None)));
+    targets = bench_compare
+}
 
 criterion::criterion_main!(benches);
 

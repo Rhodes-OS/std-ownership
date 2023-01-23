@@ -3,12 +3,13 @@ use std_ownership_api::model::Role;
 use crate::rcm::contract::ResourceContract;
 use std_ownership_api::checker::Checker;
 use std_ownership_api::model::Resource;
+use crossbeam::utils::CachePadded;
 use std::collections::HashMap;
 use std::io;
 
 #[derive(Debug)]
 pub struct ResourceCenter<R, C> {
-    resource_contracts: HashMap<u8, ResourceContract<R, C>>
+    resource_contracts: HashMap<u8, CachePadded<ResourceContract<R, C>>>
 }
 
 impl<R, C> ResourceCenter<R, C> 
@@ -79,7 +80,7 @@ where
     }
 
     pub fn build_owner_checkers(&mut self, applier_id: u8, resource: R, owner_checkers: Vec<C>) {
-        let mut contract = ResourceContract::new(resource);
+        let mut contract = CachePadded::new(ResourceContract::new(resource));
 
         //init role checkers
         contract.add_role_entry(Role::OWNER, owner_checkers);
@@ -93,7 +94,7 @@ where
     }
 
     #[inline]
-    pub fn get_resource_contract(&mut self, resource_id: u8) -> io::Result<&mut ResourceContract<R, C>> {
+    pub fn get_resource_contract(&mut self, resource_id: u8) -> io::Result<&mut CachePadded<ResourceContract<R, C>>> {
         match self.resource_contracts.get_mut(&resource_id) {
             Some(resource_contract) => Ok(resource_contract),
             _ => Err(io::Error::new(io::ErrorKind::NotFound, "Not exist resource contract in rcm"))
@@ -101,7 +102,7 @@ where
     }
 
     #[inline]
-    pub fn resource_contracts(&mut self) -> &mut HashMap<u8, ResourceContract<R, C>> {
+    pub fn resource_contracts(&mut self) -> &mut HashMap<u8, CachePadded<ResourceContract<R, C>>> {
         &mut self.resource_contracts
     }    
 }

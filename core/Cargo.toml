@@ -9,4 +9,5 @@ doctest = false
 [dependencies]
 libc = "0.2"
 strum = "0.24"
+crossbeam = "0.8.2"
 std_ownership_api = { path = "../api/" }
