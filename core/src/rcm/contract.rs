@@ -2,9 +2,10 @@ use std_ownership_api::model::Role;
 use std_ownership_api::model::Resource;
 use crate::model::role::RoleEntry;
 use strum::IntoEnumIterator;
+use parking_lot::Mutex;
 use std::collections::HashMap;
 use std::collections::hash_set::HashSet;
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 use std::io;
 
 #[derive(Debug)]
@@ -36,7 +37,7 @@ where
     #[inline]
     pub fn add_lifecycle_owner(&mut self, role: Role, owner_id: u8) -> bool {
         match self.lifecycle_owners(role) {
-            Some(mutex_owners) => mutex_owners.lock().unwrap().insert(owner_id),
+            Some(mutex_owners) => mutex_owners.lock().insert(owner_id),
             None => false
         }
     }
@@ -44,7 +45,7 @@ where
     #[inline]
     pub fn contain_lifecycle_owner(&mut self, owner_id: u8, role: Role) -> bool {
         match self.lifecycle_owners(role) {
-            Some(mutex_owners) => mutex_owners.lock().unwrap().contains(&owner_id),
+            Some(mutex_owners) => mutex_owners.lock().contains(&owner_id),
             None => false
         }
     }
@@ -52,7 +53,7 @@ where
     #[inline]
     pub fn remove_lifecycle_owner(&mut self, owner_id: u8, role: Role) -> bool {
         match self.lifecycle_owners(role) {
-            Some(mutex_owners) => mutex_owners.lock().unwrap().remove(&owner_id),
+            Some(mutex_owners) => mutex_owners.lock().remove(&owner_id),
             None => false
         }
     }

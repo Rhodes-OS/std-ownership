@@ -10,4 +10,5 @@ doctest = false
 libc = "0.2"
 strum = "0.24"
 crossbeam = "0.8.2"
+parking_lot = "0.12.1"
 std_ownership_api = { path = "../api/" }
