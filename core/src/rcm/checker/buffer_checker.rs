@@ -24,7 +24,7 @@ impl<'a> BufferChecker<'a> {
 impl<'a> Checker for BufferChecker<'a> {
     #[inline]
     fn check(&self, buf: &[u8]) -> bool {
-        if self.buffer.size() >= self.buffer.used_size() + buf.len() as u64 {
+        if self.buffer.size() <= self.buffer.used_size() + buf.len() as u64 {
             return false;
         }
         true
