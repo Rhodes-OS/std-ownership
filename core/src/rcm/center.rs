@@ -12,6 +12,8 @@ pub struct ResourceCenter<R, C> {
     resource_contracts: HashMap<u8, CachePadded<ResourceContract<R, C>>>
 }
 
+type ResContractMap<R, C> = HashMap<u8, CachePadded<ResourceContract<R, C>>>;
+
 impl<R, C> ResourceCenter<R, C> 
 where
     R: Resource + Copy,
@@ -102,7 +104,7 @@ where
     }
 
     #[inline]
-    pub fn resource_contracts(&mut self) -> &mut HashMap<u8, CachePadded<ResourceContract<R, C>>> {
+    pub fn resource_contracts(&mut self) -> &mut ResContractMap<R, C> {
         &mut self.resource_contracts
     }    
 }
