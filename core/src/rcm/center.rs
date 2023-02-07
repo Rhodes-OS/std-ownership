@@ -81,6 +81,7 @@ where
         ResourceCenter::new()
     }
 
+    #[cfg(not(no_global_oom_handling))]
     pub fn build_owner_checkers(&mut self, applier_id: u8, resource: R, owner_checkers: Vec<C>) {
         let mut contract = CachePadded::new(ResourceContract::new(resource));
 

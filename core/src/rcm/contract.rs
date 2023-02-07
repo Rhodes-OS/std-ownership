@@ -19,6 +19,7 @@ impl<R, C> ResourceContract<R, C>
 where
     R: Resource,
 {
+    #[cfg(not(no_global_oom_handling))]
     #[must_use]
     pub fn new(resource: R) -> ResourceContract<R, C> {
         ResourceContract { 
