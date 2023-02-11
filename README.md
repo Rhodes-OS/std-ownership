@@ -11,7 +11,7 @@ cargo run --example ownership
 ```
 
 ## API
-If you'd like to customize checks to forbid other application access "mysql.ibd", you can do this like:
+If you'd like to customize checks to forbid other application directly access "mysql.ibd", you can do this like:
 ```rust
 #[derive(Debug, Clone, Copy)]
 pub struct MySQL<'a> {
