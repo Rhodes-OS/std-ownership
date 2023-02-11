@@ -21,7 +21,7 @@ fn do_borrow(regs: Registers) {
         let resource_id = regs.parm2() as *const u8;
         let data = regs.parm3() as *const &[u8];
     }
-    let applier = Applier::new(applier_id, role);
+    let applier = Applier{};
     let borrow_state = rc::borrow(applier, resource_id, data);
     let borrow_result = BorrowResult::new(applier_id, borrow_state);
     unsafe {
