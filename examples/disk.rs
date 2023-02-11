@@ -2,24 +2,24 @@ use std_ownership_api::model::Resource;
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq, Hash)]
 pub struct Disk {
-    used_size: u64,
-    size: u64
+    used_capacity: u64,
+    capacity: u64
 }
 
 impl Disk {
     #[must_use]
-    pub fn new(size: u64) -> Disk {
-        Disk { used_size: 0, size }
+    pub fn new(capacity: u64) -> Disk {
+        Disk { used_capacity: 0, capacity }
     }
 
     #[inline]
-    pub fn used_size(&self) -> u64 {
-        self.used_size
+    pub fn used_capacity(&self) -> u64 {
+        self.used_capacity
     }
 
     #[inline]
-    pub fn size(&self) -> u64 {
-        self.size
+    pub fn capacity(&self) -> u64 {
+        self.capacity
     }
 }
 
@@ -31,7 +31,7 @@ impl Resource for Disk {
 
     #[inline]
     fn check(&self, data: &[u8]) -> bool {
-        if self.size() <= self.used_size() + data.len() as u64 {
+        if self.capacity() <= self.used_capacity() + data.len() as u64 {
             return false;
         }
         true
