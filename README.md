@@ -1,5 +1,5 @@
 # std-ownership
-An ownership model that is used to replace the Ring in Linux. It's 10x faster than Ring in Syscall.
+An ownership model that is used to replace the Ring in Linux. **It's 10x faster than Ring in Syscall.**
 
 ## Overview
 The ownership system allows users to customize safety checks to guarantee system and application security.
