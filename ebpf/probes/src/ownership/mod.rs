@@ -32,6 +32,7 @@ impl Resource for Applier {
     }
 
     #[inline]
+    #[allow(unused_variables)]
     fn check(&self, buf: &[u8]) -> bool {
         true
     }
