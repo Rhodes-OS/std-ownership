@@ -2,8 +2,6 @@ use strum_macros::EnumIter;
 
 pub trait Resource {
     fn id(&self) -> u8;
-    fn used_size(&self) -> u64;
-    fn size(&self) -> u64;
 }
 pub trait Owner {
     fn id(&self) -> u8;
