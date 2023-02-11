@@ -5,7 +5,7 @@ An ownership model that is used to replace the Ring in Linux. It's 10x faster th
 The ownership system allows users to customize safety checks to guarantee system and application security.
 
 ## Quick Start
-In the `example` module, you can run
+In the `examples` module, you can run
 ```shell
 cargo run --example ownership
 ```
