@@ -1,4 +1,4 @@
-use std_ownership_api::model::{Owner, Role};
+use std_ownership_api::model::{Role, Resource};
 
 #[repr(C)]
 #[derive(Debug, Clone)]
@@ -25,13 +25,14 @@ impl Applier {
     }
 }
 
-impl Owner for Applier {
+impl Resource for Applier {
     #[inline]
     fn id(&self) -> u8 {
         self.id
     }
+
     #[inline]
-    fn role(&self) -> Role {
-        self.role
-    }    
+    fn check(&self, buf: &[u8]) -> bool {
+        true
+    }
 }

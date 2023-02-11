@@ -2,19 +2,22 @@ use criterion::Criterion;
 use pprof::criterion::{Output, PProfProfiler};
 
 use std_ownership::model::resource::buffer::Buffer;
-use std_ownership::rcm::checker::buffer_checker::BufferChecker;
 use std_ownership::rcm::center::ResourceCenter;
+use std_ownership::rcm::contract::ResourceContract;
+use std_ownership_api::model::Resource;
 
 fn bench_compare(c: &mut Criterion) {
     let mut group = c.benchmark_group("bench_compare");
     // group.sample_size(2000);
 
     group.bench_function("bench_rcm_borrow", |b| {
+        let mut rc = ResourceCenter::<Buffer>::new();
+    
         let buffer = Buffer::new(1024);
-        
-        let owner_checkers = vec![BufferChecker::new(buffer)];
-        let mut rc = ResourceCenter::builder();
-        rc.build_owner_checkers(0, buffer, owner_checkers);
+
+        let mut res_contract = ResourceContract::new(buffer);
+        res_contract.add_owner_lifecycle(buffer.id());
+        rc.register(res_contract);
 
         crate::rcm::center::bench_borrow(b, &mut rc);
     });

@@ -2,10 +2,7 @@ use strum_macros::EnumIter;
 
 pub trait Resource {
     fn id(&self) -> u8;
-}
-pub trait Owner {
-    fn id(&self) -> u8;
-    fn role(&self) -> Role;
+    fn check(&self, buf: &[u8]) -> bool;
 }
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq, Hash, EnumIter)]

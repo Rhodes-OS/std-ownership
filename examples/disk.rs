@@ -1,16 +1,15 @@
-#![deny(unsafe_op_in_unsafe_fn)]
 use std_ownership_api::model::Resource;
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq, Hash)]
-pub struct Buffer {
+pub struct Disk {
     used_size: u64,
     size: u64
 }
 
-impl Buffer {
+impl Disk {
     #[must_use]
-    pub fn new(size: u64) -> Buffer {
-        Buffer { used_size: 0, size }
+    pub fn new(size: u64) -> Disk {
+        Disk { used_size: 0, size }
     }
 
     #[inline]
@@ -24,15 +23,15 @@ impl Buffer {
     }
 }
 
-impl Resource for Buffer {
+impl Resource for Disk {
     #[inline]
     fn id(&self) -> u8 {
-        1
+        2
     }
 
     #[inline]
-    fn check(&self, buf: &[u8]) -> bool {
-        if self.size() <= self.used_size() + buf.len() as u64 {
+    fn check(&self, data: &[u8]) -> bool {
+        if self.size() <= self.used_size() + data.len() as u64 {
             return false;
         }
         true

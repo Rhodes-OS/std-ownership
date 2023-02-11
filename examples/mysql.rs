@@ -1,32 +1,50 @@
 use std::str;
-use std_ownership_api::model::{Owner, Role};
-use std_ownership_api::checker::Checker;
+use std_ownership_api::model::Resource;
 
-use crate::file::File;
+use crate::disk::Disk;
 
+#[derive(Debug, Clone, Copy)]
 pub struct MySQL<'a> {
-    pub(crate) file: File<'a>
+    sys_files: &'a str,
+    disk: Disk
 }
 
 impl<'a> MySQL<'a> {
-    fn file(&self) -> File {
-        self.file
+    #[must_use]
+    pub fn new() -> Self {
+        Self { 
+            sys_files: "mysql.ibd",
+            disk: Disk::new(1024)
+        }
+    }
+
+    #[inline]
+    pub fn sys_files(&self) -> &'a str {
+        &self.sys_files
+    }
+
+    #[inline]
+    pub fn disk(&self) -> Disk {
+        self.disk
     }
 }
 
-impl<'a> Owner for MySQL<'a> {
+impl<'a> Resource for MySQL<'a> {
+    #[inline]
     fn id(&self) -> u8 {
-        1
+        3
     }
 
-    fn role(&self) -> Role {
-        Role::UNASSIGNED
-    }
-}
-
-impl<'a> Checker for MySQL<'a> {
     #[inline]
     fn check(&self, table_name: &[u8]) -> bool {
-        self.file().name() != str::from_utf8(table_name).unwrap()
+        if !self.disk().check(table_name) {
+            return false;
+        }
+        for file in self.sys_files().split(',').collect::<Vec<&str>>() {
+            if file == str::from_utf8(table_name).unwrap() {
+                return false;
+            }
+        }
+        true
     }
 }

@@ -1,22 +1,22 @@
-use crate::file::File;
 use crate::mysql::MySQL;
-use crate::unix::Unix;
-
+use crate::jvm::JVM;
 use std_ownership::rcm::center::ResourceCenter;
-use std_ownership_api::model::Owner;
+use std_ownership::rcm::contract::ResourceContract;
+use std_ownership_api::model::Resource;
 
 pub fn main() {
-    let file = File::new(1024);
+    let mut rc = ResourceCenter::<MySQL>::new();
 
-    let owner_checkers = vec![file];
-    let owner = Unix{};
-    let mut rc = ResourceCenter::builder();
-    rc.build_owner_checkers(owner.id(), file, owner_checkers);
+    let mysql = MySQL::new();
 
-    let applier = MySQL{ file };
-    rc.borrow(applier, 2, "MySQL".as_bytes());
+    let mut res_contract = ResourceContract::new(mysql);
+    res_contract.add_owner_lifecycle(mysql.id());
+    rc.register(res_contract);
+
+    let applier = JVM{};
+    assert_eq!(false, rc.borrow(applier, 3, "mysql.ibd".as_bytes()));
 }
 
-mod file;
+mod disk;
 mod mysql;
-mod unix;
+mod jvm;

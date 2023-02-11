@@ -1,30 +1,25 @@
-use std_ownership_api::model::Role;
-use std_ownership_api::model::Resource;
-use crate::model::role::RoleEntry;
+use std_ownership_api::model::{Role, Resource};
 use strum::IntoEnumIterator;
 use parking_lot::Mutex;
 use std::collections::HashMap;
 use std::collections::hash_set::HashSet;
 use std::sync::Arc;
-use std::io;
 
 #[derive(Debug)]
-pub struct ResourceContract<R, C> {
+pub struct ResourceContract<R> {
     resource: R,
-    role_entries: HashMap<Role, RoleEntry<C>>, 
     lifecycle: HashMap<Role, Arc<Mutex<HashSet<u8>>>>
 }
 
-impl<R, C> ResourceContract<R, C>
+impl<R> ResourceContract<R>
 where
     R: Resource,
 {
     #[cfg(not(no_global_oom_handling))]
     #[must_use]
-    pub fn new(resource: R) -> ResourceContract<R, C> {
+    pub fn new(resource: R) -> ResourceContract<R> {
         ResourceContract { 
             resource,
-            role_entries: HashMap::with_capacity(8),
             lifecycle: {
                 let mut lifecycle_map = HashMap::with_capacity(8);
                 for role in Role::iter() {
@@ -35,57 +30,47 @@ where
         }
     }
 
+    #[cfg(not(no_global_oom_handling))]
+    pub fn add_owner_lifecycle(&mut self, owner_id: u8) {
+        //init role lifecycle
+        self.init_lifecycle(Role::OWNER);
+        self.add_lifecycle_obj(Role::OWNER, owner_id);
+    }
+
     #[inline]
-    pub fn add_lifecycle_owner(&mut self, role: Role, owner_id: u8) -> bool {
-        match self.lifecycle_owners(role) {
+    pub fn add_lifecycle_obj(&mut self, role: Role, owner_id: u8) -> bool {
+        match self.lifecycle_objs(role) {
             Some(mutex_owners) => mutex_owners.lock().insert(owner_id),
             None => false
         }
     }
 
     #[inline]
-    pub fn contain_lifecycle_owner(&mut self, owner_id: u8, role: Role) -> bool {
-        match self.lifecycle_owners(role) {
+    pub fn contain_lifecycle_obj(&mut self, owner_id: u8, role: Role) -> bool {
+        match self.lifecycle_objs(role) {
             Some(mutex_owners) => mutex_owners.lock().contains(&owner_id),
             None => false
         }
     }
 
     #[inline]
-    pub fn remove_lifecycle_owner(&mut self, owner_id: u8, role: Role) -> bool {
-        match self.lifecycle_owners(role) {
+    pub fn remove_lifecycle_obj(&mut self, owner_id: u8, role: Role) -> bool {
+        match self.lifecycle_objs(role) {
             Some(mutex_owners) => mutex_owners.lock().remove(&owner_id),
             None => false
         }
     }
 
-    pub fn add_lifecycle(&mut self, role: Role) {
+    pub fn init_lifecycle(&mut self, role: Role) {
         self.lifecycle.insert(role, Arc::new(Mutex::new(HashSet::with_capacity(1000))));
     }
 
     #[inline]
-    pub fn lifecycle_owners(&mut self, role: Role) -> Option<&mut Arc<Mutex<HashSet<u8>>>> {
+    pub fn lifecycle_objs(&mut self, role: Role) -> Option<&mut Arc<Mutex<HashSet<u8>>>> {
         match self.lifecycle.get_mut(&role) {
             Some(role_entry_owners) => Some(role_entry_owners),
             _ => None
         }
-    }
-
-    pub fn add_role_entry(&mut self, role: Role, checkers: Vec<C>) {
-        self.role_entries.insert(role, RoleEntry::new(role, checkers));
-    }
-
-    #[inline]
-    pub fn role_entry(&mut self, role: Role) -> io::Result<&mut RoleEntry<C>> {
-        match self.role_entries.get_mut(&role) {
-            Some(role_entry) => Ok(role_entry),
-            _ => Err(io::Error::new(io::ErrorKind::NotFound, "Not exist role entry"))
-        }
-    }
-
-    #[inline]
-    pub fn role_entries(&self) -> &HashMap<Role, RoleEntry<C>> {
-        &self.role_entries
     }
 
     #[inline]
