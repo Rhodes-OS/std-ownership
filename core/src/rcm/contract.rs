@@ -32,8 +32,6 @@ where
 
     #[cfg(not(no_global_oom_handling))]
     pub fn add_owner_lifecycle(&mut self, owner_id: u8) {
-        //init role lifecycle
-        self.init_lifecycle(Role::OWNER);
         self.add_lifecycle_obj(Role::OWNER, owner_id);
     }
 
