@@ -16,7 +16,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build
-      run: cargo build --verbose
+    - name: Build API
+      run: cargo build -p std_ownership_api --verbose
+    - name: Build Benches
+      run: cargo build -p benches --verbose
+    - name: Build Core
+      run: cargo build -p std_ownership --verbose
+    - name: Build Examples
+      run: cargo build -p examples --verbose
     - name: Run tests
       run: cargo test --verbose
