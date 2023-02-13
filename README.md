@@ -1,7 +1,8 @@
 # std-ownership
 
-[![Build Status](https://github.com/Rhodes-OS/std-ownership/actions/workflows/rust.yml/badge.svg)](https://github.com/Rhodes-OS/std-ownership/actions)
+[![Build Status](https://github.com/Rhodes-OS/std-ownership/actions/workflows/rust.yml/badge.svg)](https://github.com/Rhodes-OS/std-ownership/actions/workflows/rust.yml)
 [![Rust](https://img.shields.io/badge/rust-1.66.1%2B-blue.svg?maxAge=3600)](https://github.com/Rhodes-OS/std-ownership)
+[![Benchmark](https://github.com/Rhodes-OS/std-ownership/actions/workflows/benches.yml/badge.svg)](https://github.com/Rhodes-OS/std-ownership/actions/workflows/benches.yml)
 
 An ownership model that is used to replace the Ring in Linux. **It's 10x faster than Ring in Syscall.**
 
