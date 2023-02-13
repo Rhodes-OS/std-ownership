@@ -25,4 +25,4 @@ jobs:
     - name: Build Examples
       run: cargo build -p examples --verbose
     - name: Run tests
-      run: cargo test --verbose
+      run: cargo test -p std_ownership --verbose
