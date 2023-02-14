@@ -1,7 +1,7 @@
 # std-ownership
 
 [![Build Status](https://github.com/Rhodes-OS/std-ownership/actions/workflows/rust.yml/badge.svg)](https://github.com/Rhodes-OS/std-ownership/actions/workflows/rust.yml)
-[![Rust](https://img.shields.io/badge/rust-1.66.1%2B-blue.svg?maxAge=3600)](https://github.com/Rhodes-OS/std-ownership)
+[![Rust](https://img.shields.io/badge/rust-1.61.0%2B-blue.svg?maxAge=3600)](https://github.com/Rhodes-OS/std-ownership)
 [![Benchmark](https://github.com/Rhodes-OS/std-ownership/actions/workflows/benches.yml/badge.svg)](https://github.com/Rhodes-OS/std-ownership/actions/workflows/benches.yml)
 [![Discord chat](https://img.shields.io/discord/1074717722983800963.svg?logo=discord&style=flat-square)](https://discord.gg/XDvtrvxjKS)
 
