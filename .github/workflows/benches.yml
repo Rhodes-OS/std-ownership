@@ -18,5 +18,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Set up Rust
+      uses: actions/setup-rust@v3
+      with:
+        rust-version: stable
+    - name: Install Cargo dependencies
+      run: cargo install --path .
     - name: Benches
       run: cargo bench -p benches -j 16
