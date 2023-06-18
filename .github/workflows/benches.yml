@@ -17,4 +17,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Benches
-      run: cargo bench -p benches -j 2
+      run: cargo bench -p benches -j 4
