@@ -12,7 +12,9 @@ env:
 jobs:
   build:
 
-    runs-on: [self-hosted, Linux, X64]
+    runs-on: 
+      group: Default
+      labels: [self-hosted, Linux, X64]
 
     steps:
     - uses: actions/checkout@v3
