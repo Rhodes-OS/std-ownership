@@ -13,7 +13,7 @@ jobs:
   build:
 
     runs-on: 
-      group: Rhodes-OS/Default
+      group: organization/Default
       labels: [self-hosted, Linux, X64]
 
     steps:
