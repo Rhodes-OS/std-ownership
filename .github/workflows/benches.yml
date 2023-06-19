@@ -19,4 +19,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Benches
-      run: cargo bench -p benches -j 16
+      run: /home/github/.cargo/bin/cargo bench -p benches -j 16
